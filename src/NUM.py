@@ -34,7 +34,6 @@ class NUM(VAL):
             return n
         else:
             val = (n-self.lo)/(self.hi-self.lo + 1e-32)
-                    
         return val
 
     def dist(self, n1, n2):

@@ -37,4 +37,5 @@ class SYM(VAL):
         return x
 
     def dist(self, s1, s2):
-        return 1 if s1=='?' and s2=='?' else 0 if s1==s2 else 1
+        distance = 1 if s1=='?' and s2=='?' else 0 if s1==s2 else 1
+        return distance

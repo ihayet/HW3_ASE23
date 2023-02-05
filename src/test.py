@@ -1,7 +1,7 @@
 from re import S
 from SYM import SYM
 from NUM import NUM
-from strings import o, oo
+from strings import o, oo, show
 from utils import getThe, rand, rnd, setSeed, get_ofile
 from csv import csv
 from DATA import DATA
@@ -91,7 +91,7 @@ def stats_test():
 def clone_test():
     err = 0
     data1 = DATA(getThe()['file'], None, None)
-    data2 = data1.clone()
+    data2 = data1.clone(data1.rows)
     err += 1 if len(data1.rows) != len(data2.rows) else 0
     err += 1 if data1.cols.ycols[0].w != data2.cols.ycols[0].w else 0
     err += 1 if data1.cols.xcols[0].get_pos() != data2.cols.xcols[0].get_pos() else 0
@@ -101,11 +101,12 @@ def clone_test():
 def around_test():
     err = 0
     data = DATA(getThe()['file'], None, None)
-
+    
     around_dict = data.around(data.rows[0], None)
+    print(0, 0, o(data.rows[0].cells))
     for n, (r, t) in enumerate(around_dict.items()):
-        if n%50==0:
-            print(n, rnd(t['dist'], 2), o(t['row'].cells))
+        if n>0 and (n+1)%50==0:
+            print(n+1, rnd(t['dist'], 2), o(t['row'].cells))
 
     return err
 
@@ -122,7 +123,17 @@ def half_test():
     return err
 
 def cluster_test():
-    pass
+    err = 0
+
+    data = DATA(getThe()['file'], None, None)
+    show(data.cluster(None, None, None, None), 'mid', data.cols.ycols, 1, None)
+
+    return err
 
 def optimize_test():
-    pass
+    err = 0
+
+    data = DATA(getThe()['file'], None, None)
+    show(data.sway(None, None, None, None), 'mid', data.cols.ycols, 1, None)
+
+    return err

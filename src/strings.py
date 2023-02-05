@@ -87,7 +87,9 @@ def coerce(s):
 def show(node, what, cols, nPlaces, lvl):
   if node is not None:
     lvl = lvl if lvl is not None else 0
-    print('|'*lvl, len(node.data.rows), ' ')
-    print((o(node.data.stats('mid', node.data.cols.ycols, nPlaces)) if (node.left is not None or lvl==0) else ''))
-    show(node.left, what, cols, nPlaces, lvl+1)
-    show(node.right, what, cols, nPlaces, lvl+1)
+    print('| '*lvl, len(node['data'].rows), ' ', end='')
+    print((o(node['data'].stats('mid', node['data'].cols.ycols, nPlaces)) if ('left' not in node or lvl==0) else ''))
+    if 'left' in node:
+        show(node['left'], what, cols, nPlaces, lvl+1)
+    if 'right' in node:
+        show(node['right'], what, cols, nPlaces, lvl+1)

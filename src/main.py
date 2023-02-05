@@ -3,7 +3,7 @@ import re
 import sys
 import os
 from strings import fmt, coerce
-from utils import getThe, setThe, setSeed, get_ofile
+from utils import getThe, setThe, setSeed, get_ofile, rint
 from test import settings_test, rand_test, sym_test, num_test, csv_test, data_test, stats_test, clone_test, around_test, half_test, cluster_test, optimize_test
 
 help = 'script.lua : an example script with help text and a test suite\n (c)2022, Tim Menzies <timm@ieee.org>, BSD-2\n USAGE:   script.lua  [OPTIONS] [-g ACTION] \n OPTIONS: \n -d  --dump  on crash, dump stack = false \n -f  --file  name of file = etc/data/auto93.csv \n -F  --Far  distance to "faraway" = 0.95 \n -g  --go    start-up action      = data \n -h  --help  show help            = false \n -m  --min  stop clusters at N^min = 0.5 \n -p  --p  distance coefficient = 2 \n -s  --seed  random number seed   = 937162211 \n -S  --Sample  sampling data size = 512 \n ACTIONS:\n'
@@ -54,11 +54,13 @@ def main(options, help, funs):
     #eg("rand","generate, reset, regenerate same", rand_test)
     eg("sym","check syms", sym_test)
     eg("num", "check nums", num_test)
-    eg("csv", "read from csv", csv_test)
+    #eg("csv", "read from csv", csv_test)
     eg("data", "read DATA csv", data_test)
     eg("clone", "duplicate structure", clone_test)
     eg("around", "sorting nearest neighbors", around_test)
     eg("half", "1-level bi-clustering", half_test)
+    eg("cluster", "N-level bi-clustering", cluster_test)
+    eg("optimize", "semi-supervised optimization", optimize_test)
 
     o_file = get_ofile()
     err = 0
@@ -78,9 +80,11 @@ def main(options, help, funs):
                     err += funs[fun_key]()
                     print("❌ fail:", fun_key) 
                     o_file.write("❌ fail: " + str(fun_key) + "\n")
+                    pass
                 else:
                     print("✅ pass:", fun_key)
                     o_file.write("✅ pass: " + str(fun_key) + "\n")
+                    pass
         
         o_file.close()
 

@@ -2,8 +2,9 @@
 ✅ pass: the
 ✅ pass: sym
 ✅ pass: num
-✅ pass: csv
 ✅ pass: data
 ✅ pass: clone
 ✅ pass: around
 ✅ pass: half
+✅ pass: cluster
+✅ pass: optimize

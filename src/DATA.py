@@ -19,8 +19,8 @@ class DATA:
             self.cols = COLS(t)
         return t, None
 
-    def clone(self):
-        data = DATA(None, [self.cols.names], [row.get_cells() for row in self.rows])
+    def clone(self, rows):
+        data = DATA(None, [self.cols.names], [row.get_cells() for row in (rows if rows is not None else self.rows)])
         return data
 
     def stats(self, what, cols, nPlaces):
@@ -42,7 +42,8 @@ class DATA:
         for _, col in enumerate(cols if cols is not None else self.cols.xcols):
             n += 1
             d += col.dist(row1.cells[col.get_pos()], row2.cells[col.get_pos()])**getThe()['p']
-        return (d/n)**(1/getThe()['p'])
+        val = (d/n)**(1/getThe()['p'])
+        return val
 
     def around(self, row1, rows):
         def fun(row2):
@@ -50,7 +51,7 @@ class DATA:
             ret['row'] = row2
             ret['dist'] = self.dist(row1, row2, self.cols.xcols)
             return ret, None
-        mapped_val = map(rows if rows is not None else self.rows[1:], fun)
+        mapped_val = map(rows if rows is not None else self.rows, fun)
         sorted_val = sort(mapped_val, 'dist')
 
         return dict(sorted_val)
@@ -65,20 +66,54 @@ class DATA:
             return ret, None
         rows = rows if rows is not None else self.rows
         some = many(rows, getThe()['Sample'])
+        
         A = above if above is not None else any(some)
-        B = self.around(A, some)[math.floor(getThe()['Far'] * len(rows)/1)]['row']
+
+        b1 = self.around(A, some)
+        target_idx = math.floor(getThe()['Far'] * len(rows))
+
+        for n, (key, val) in enumerate(b1.items()):
+            if n==target_idx:
+                B = val['row']
+        
         c = self.dist(A, B, None)
+        mid = []
 
         for n, (r, t) in enumerate(dict(sort(map(rows, project), 'dist')).items()):
-            if n <= math.floor(len(rows)/2):
+            if n < math.floor(len(rows)/2):
                 left.append(t['row'])
                 mid = t['row']
             else:
                 right.append(t['row'])
         return left, right, A, B, mid, c
 
-    def cluster():
-        pass
+    def cluster(self, rows, min, cols, above):
+        rows = rows if rows is not None else self.rows
+        min = min if min is not None else len(rows)**getThe()['min']
+        cols = cols if cols is not None else self.cols.xcols
+        node = {
+            'data': self.clone(rows)
+        }
+        
+        if len(rows) > 2*min:
+            left, right, node['A'], node['B'], node['mid'], _c = self.half(rows, cols, above)
+            node['left'] = self.cluster(left, min, cols, node['A'])
+            node['right'] = self.cluster(right, min, cols, node['B'])
+        
+        return node
 
-    def sway():
-        pass
+    def sway(self, rows, min, cols, above):
+        rows = rows if rows is not None else self.rows
+        min = min if min is not None else len(rows)**getThe()['min']
+        cols = cols if cols is not None else self.cols.xcols
+        node = {
+            'data': self.clone(rows)
+        }
+
+        if len(rows) > 2*min:
+            left, right, node['A'], node['B'], node['mid'], c = self.half(rows, cols, above)
+            if self.better(node['B'], node['A']):
+                left, right, node['A'], node['B'] = right, left, node['B'], node['A']
+            node['left'] = self.sway(left, min, cols, node['A'])
+
+        return node

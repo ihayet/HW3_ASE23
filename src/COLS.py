@@ -3,12 +3,10 @@ from NUM import NUM
 from SYM import SYM
 
 class COLS:
-    names = []
-    all, xcols, ycols, skipcols = [], [], [], []
-    klass = ''
-
     def __init__(self, t):
         self.names = t
+        self.all, self.xcols, self.ycols, self.skipcols = [], [], [], []
+        self.klass = ''
         for n, s in enumerate(t):
             col = NUM(n,s) if (len(re.findall(r'^[A-Z]+', s)) > 0) else SYM(n, s)
             self.all.append(col)
