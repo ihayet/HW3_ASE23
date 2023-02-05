@@ -100,25 +100,43 @@ def clone_test():
 
 def around_test():
     err = 0
+    o_file = get_ofile()
     data = DATA(getThe()['file'], None, None)
     
     around_dict = data.around(data.rows[0], None)
-    print(0, 0, o(data.rows[0].cells))
+    pval = str('0' + '0' + o(data.rows[0].cells))
+    print(pval)
+    o_file.write(pval + '\n')
     for n, (r, t) in enumerate(around_dict.items()):
         if n>0 and (n+1)%50==0:
-            print(n+1, rnd(t['dist'], 2), o(t['row'].cells))
+            pval = str(n+1) + ' ' + str(rnd(t['dist'], 2)) + ' ' +  str(o(t['row'].cells))
+            print(pval)
+            o_file.write(pval + '\n')
 
     return err
 
 def half_test():
     err = 0
+    o_file = get_ofile()
 
     data = DATA(getThe()['file'], None, None)
     left, right, A, B, mid, c = data.half(None, None, None)
-    print(len(left), len(right), len(data.rows))
-    print(o(A.cells), c)
-    print(o(mid.cells))
-    print(o(B.cells))
+    
+    pval = str(len(left)) + ' ' + str(len(right)) + ' ' + str(len(data.rows))
+    print(pval)
+    o_file.write(pval + '\n')
+    
+    pval = o(A.cells) + ' ' + str(c)
+    print(pval)
+    o_file.write(pval + '\n')
+
+    pval = o(mid.cells)
+    print(pval)
+    o_file.write(pval + '\n')
+
+    pval = o(B.cells)
+    print(pval)
+    o_file.write(pval + '\n')
 
     return err
 
