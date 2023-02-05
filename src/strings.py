@@ -90,8 +90,8 @@ def show(node, what, cols, nPlaces, lvl):
     lvl = lvl if lvl is not None else 0
     
     pval = str('| '*lvl) + str(len(node['data'].rows)) + ' ' 
-    print(pval)
-    o_file.write(pval + '\n')
+    print(pval, end='')
+    o_file.write(pval)
     
     pval = o(node['data'].stats('mid', node['data'].cols.ycols, nPlaces)) if ('left' not in node or lvl==0) else '' 
     print(pval)

@@ -104,10 +104,9 @@ def around_test():
     data = DATA(getThe()['file'], None, None)
     
     around_dict = data.around(data.rows[0], None)
-    pval = str('0 ' + '0 ' + o(data.rows[0].cells))
-    print(pval, end='')
-    o_file.write(pval)
-    
+    pval = str(0) + ' ' + str(0) + ' ' + o(data.rows[0].cells)
+    print(pval)
+    o_file.write(pval + '\n')
     for n, (r, t) in enumerate(around_dict.items()):
         if n>0 and (n+1)%50==0:
             pval = str(n+1) + ' ' + str(rnd(t['dist'], 2)) + ' ' +  str(o(t['row'].cells))
